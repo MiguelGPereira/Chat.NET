@@ -1,0 +1,16 @@
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\bin\Debug\Client.exe.config
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\bin\Debug\Client.exe
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\bin\Debug\Client.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\bin\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\bin\Debug\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\obj\Debug\Client.exe
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\obj\Debug\Client.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Client.exe.config
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Client.exe
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Client.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.exe
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.pdb

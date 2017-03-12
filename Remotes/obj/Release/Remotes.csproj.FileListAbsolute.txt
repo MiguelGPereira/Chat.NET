@@ -1,0 +1,7 @@
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\bin\Release\Remotes.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\bin\Release\Remotes.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\bin\Release\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\bin\Release\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\obj\Release\Remotes.csprojResolveAssemblyReference.cache
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\obj\Release\Remotes.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Remotes\obj\Release\Remotes.pdb

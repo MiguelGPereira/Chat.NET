@@ -1,0 +1,10 @@
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Common\bin\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Common\bin\Debug\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Common\obj\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Common\obj\Debug\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\RemoteMultiDemo\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Common\bin\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Common\bin\Debug\Common.pdb
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Common\obj\Debug\Common.csprojResolveAssemblyReference.cache
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Common\obj\Debug\Common.dll
+C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Common\obj\Debug\Common.pdb
