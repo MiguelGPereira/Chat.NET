@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{42A0253E-0B01-4F40-8925-BCF3C47170DD}"
 EndProject
@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remotes", "Remotes\Remotes.csproj", "{F92850A9-6762-4B5A-8D29-C8637A538710}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{F7789816-7A44-488D-82FA-224C8FC1CFB2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F92850A9-6762-4B5A-8D29-C8637A538710} = {F92850A9-6762-4B5A-8D29-C8637A538710}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

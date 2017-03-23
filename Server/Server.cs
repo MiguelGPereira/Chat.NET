@@ -6,5 +6,5 @@ class Server {
     RemotingConfiguration.Configure("Server.exe.config", false);
     Console.WriteLine("[Server]: Press return to exit");
     Console.ReadLine();
-  }
+    }
 }

@@ -11,14 +11,12 @@ public class Server : MarshalByRefObject, IServer
     }
 
     private int nr = 1;
-    string[] names = { "Peter", "John", "George", "Mary", "Michael", "Anthony" };
     List<Client> clients = new List<Client>();
 
     public event HandlerNotify newClientEvent;
 
     public override object InitializeLifetimeService()
     {
-        //loadClients();
         Console.WriteLine("[Entities]: InitilizeLifetimeService");
         return null;
     }
@@ -56,10 +54,11 @@ public class Server : MarshalByRefObject, IServer
             string line = sr.ReadLine();
             while (line != null)
             {
-                string name = line.Split('/')[0];
-                string password = line.Split('/')[1];
+                string name = line.Split('%')[0];
+                string password = line.Split('%')[1];
+                string address = line.Split('%')[2];
 
-                Client client = new Client(name, password);
+                Client client = new Client(name, password, address);
                 clients.Add(client);
 
                 line = sr.ReadLine();
@@ -70,14 +69,18 @@ public class Server : MarshalByRefObject, IServer
         
     }
 
-    public ClientInstance AddNewClient(string name, string password)
+    /*
+     * Recebe um pedido de criacao de instancia de um novo cliente e informa
+     * todos os clientes sobre isso
+     */ 
+    public ClientInstance AddNewClient(string name, string password, string address)
     {
         Client client = getClientByName(name);
         string userevent = "login";
 
         if(client == null)
         {
-            client = new Client(name, password);
+            client = new Client(name, password, address);
             saveClient(client);
             userevent = "signup";
         }
@@ -86,7 +89,7 @@ public class Server : MarshalByRefObject, IServer
             return null;
         }
 
-        ClientInstance clientInst = new ClientInstance(nr, name);
+        ClientInstance clientInst = new ClientInstance(nr, name, address);
         Console.WriteLine("[Server]: New client "+userevent+" (" + name + ")");
         nr += 1;
 
@@ -96,7 +99,7 @@ public class Server : MarshalByRefObject, IServer
 
             foreach (HandlerNotify handler in invkList)
             {
-                Console.WriteLine("[Server]: Join Event triggered: invoking handler to inform client x");
+                Console.WriteLine("[Server]: Join Event triggered: invoking handler to inform client");
                 new Thread(() =>
                 {
                     try
@@ -117,16 +120,33 @@ public class Server : MarshalByRefObject, IServer
 
 class Client
 {
-    public Client(string name, string password)
+    public Client(string name, string password, string address)
     {
         Name = name;
         Password = password;
+        Address = address;
     }
     public string Name { get; set; }
     public string Password { get; set; }
+    public string Address { get; set; }
 
     public string Info()
     {
-        return Name + "/" + Password;
+        return Name + "%" + Password + "%" + Address;
+    }
+}
+
+public class Chat : MarshalByRefObject, IChat
+{
+    public event HandlerNotify newClientEvent;
+    public Chat()
+    {
+        Console.WriteLine("chat room on");
+    }
+
+    public override object InitializeLifetimeService()
+    {
+        Console.WriteLine("[Entities]: InitilizeLifetimeService");
+        return null;
     }
 }

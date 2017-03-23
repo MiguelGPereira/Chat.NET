@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.Remoting;
+using System.Text.RegularExpressions;
 
 class Client
 {
@@ -18,10 +20,16 @@ class Client
             string name = Console.ReadLine();
             Console.WriteLine("[Client] Enter password:");
             string password = Console.ReadLine();
-            self = server.AddNewClient(name, password);
+            
+            string address = getClientTCPAddress();
+            Console.WriteLine("port->"+ address);
+            /*
+             * Pede ao servidor que lhe crie uma instancia
+             */
+            self = server.AddNewClient(name, password, address);
             if(self != null)
             {
-                Console.WriteLine("[Client]: Joined! Data is (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
+                Console.WriteLine("[Client]: Joined! (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
                 Console.ReadLine();
             }
             else
@@ -35,12 +43,52 @@ class Client
         server.newClientEvent -= inter.FireNewClient;
     }
 
+    /*
+     * Recebe o registo de novos clientes
+     */
     static void OnNewClient(ClientInstance client)
     {
-        Console.WriteLine("[Client Joined]: Event handler called for " + client.Name + " Id: " + client.Id.ToString());
+        Console.WriteLine("[Client Joined]: " + client.Name + " in: " + client.Address);
+    }
+
+    /*
+     * Usa o comando netstat (precisa de estar ativado nas funcionalidades extras do windows)
+     * para obter a porta do processo tcp corrente
+     */
+    static string getClientTCPAddress()
+    {
+        int clientProcessID = Process.GetCurrentProcess().Id;
+
+        Process p = new Process();
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.FileName = "netstat.exe";
+        p.StartInfo.Arguments = "-ano";
+        p.Start();
+        string output = p.StandardOutput.ReadToEnd();
+        p.WaitForExit();
+        string[] rows = Regex.Split(output, "\r\n");
+        foreach (string row in rows)
+        {
+            string[] tokens = Regex.Split(row, "\\s+");
+            if (tokens.Length > 4 && (tokens[1].Equals("TCP")))
+            {
+                string localAddress = Regex.Replace(tokens[2], @"\[(.*?)\]", "1.1.1.1");
+                //string port_number = localAddress.Split(':')[1];
+                int pid = Convert.ToInt16(tokens[5]);
+                if (pid == clientProcessID)
+                {
+                    return localAddress;
+                }
+            }
+        }
+        return null;
     }
 }
 
+/*
+ * Cria ligacoes a objectos remotos
+ */ 
 class RemoteNew
 {
     private static Hashtable types = null;
