@@ -11,9 +11,25 @@ class Client
         Intermediate inter = new Intermediate(server);
         inter.newClientEvent += OnNewClient;
 
-        ClientInstance self = server.AddNewClient();
-        Console.WriteLine("[Client]: Joined! Data is (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
-        Console.ReadLine();
+        ClientInstance self = null;
+        while(self == null)
+        {
+            Console.WriteLine("[Client] Enter username:");
+            string name = Console.ReadLine();
+            Console.WriteLine("[Client] Enter password:");
+            string password = Console.ReadLine();
+            self = server.AddNewClient(name, password);
+            if(self != null)
+            {
+                Console.WriteLine("[Client]: Joined! Data is (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
+                Console.ReadLine();
+            }
+            else
+            {
+                Console.WriteLine("There is already a username with a different password");
+            }
+        }
+        
 
         inter.newClientEvent -= OnNewClient;
         server.newClientEvent -= inter.FireNewClient;

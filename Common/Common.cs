@@ -17,7 +17,7 @@ public class ClientInstance
 public interface IServer
 {
     event HandlerNotify newClientEvent;
-    ClientInstance AddNewClient();
+    ClientInstance AddNewClient(string name, string password);
 }
 
 public class Intermediate : MarshalByRefObject
