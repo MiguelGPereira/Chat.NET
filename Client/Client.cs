@@ -120,10 +120,7 @@ class Client
      */
      static void handleNewChatMessage(ClientInstance source, string message)
     {
-       // if(source != Client.name)
-        //{
-            Console.WriteLine("Message from '" + source.Name + "': " + message);
-        //}
+        Console.WriteLine("Message from '" + source.Name + "': " + message);
     }
 
     /*
@@ -194,22 +191,7 @@ public class Chat : MarshalByRefObject
     public delegate void NewMessageHandler(ClientInstance source, string message);
     public event NewMessageHandler NewMessage;
 
-    public Chat()
-    {
-        /*Console.WriteLine("chat room on");
-        NewMessage += printNewMessage;
-        while (true)
-        {
-            string message = Console.ReadLine();
-            string source = "you";
-            addMessage(source, message);
-        }*/
-    }
-
-    /*private void printNewMessage(string source, string message)
-    {
-        Console.WriteLine("Message from '" + source + "': " + message);
-    }*/
+    public Chat() {}
 
     public override object InitializeLifetimeService()
     {

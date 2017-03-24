@@ -51,7 +51,3 @@ public class Intermediate : MarshalByRefObject
         return null;
     }
 }
-public interface IChat
-{
-    void addMessage(string message);
-}
