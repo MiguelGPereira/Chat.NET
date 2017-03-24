@@ -53,5 +53,5 @@ public class Intermediate : MarshalByRefObject
 }
 public interface IChat
 {
-    event NewClientHandler newClientEvent;
+    void addMessage(string message);
 }

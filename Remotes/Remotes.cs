@@ -26,7 +26,7 @@ public class Server : MarshalByRefObject, IServer
     {
         foreach (Client client in clients)
         {
-            if(client.Name == name)
+            if (client.Name == name)
             {
                 return client;
             }
@@ -67,31 +67,31 @@ public class Server : MarshalByRefObject, IServer
             sr.Close();
         }
         catch (System.IO.FileNotFoundException e) { }
-        
+
     }
 
     /*
      * Recebe um pedido de criacao de instancia de um novo cliente e informa
      * todos os clientes sobre isso
-     */ 
+     */
     public ClientInstance AddNewClient(string name, string password, string address)
     {
         Client client = getClientByName(name);
         string userevent = "login";
 
-        if(client == null)
+        if (client == null)
         {
             client = new Client(name, password, address);
             saveClient(client);
             userevent = "signup";
         }
-        else if(client.Password != password)
+        else if (client.Password != password)
         {
             return null;
         }
 
         ClientInstance clientInst = new ClientInstance(nr, name, address);
-        Console.WriteLine("[Server]: New client "+userevent+" (" + name + ")");
+        Console.WriteLine("[Server]: New client " + userevent + " (" + name + ")");
         nr += 1;
 
         if (newClientEvent != null)
@@ -143,34 +143,8 @@ public class Server : MarshalByRefObject, IServer
         }
         return true;
     }
-
-    /*public void CreateNewChatRequest(string name, string address)
-    {
-        if (newClientRequest != null)
-        {
-            Delegate[] invkList = newClientRequest.GetInvocationList();
-
-            foreach (NewClientHandler handler in invkList)
-            {
-                Console.WriteLine("[Server]: invoking handler to inform client of request");
-                new Thread(() =>
-                {
-                    try
-                    {
-                        handler(clientInst);
-                    }
-                    catch (Exception)
-                    {
-                        Console.WriteLine("[TriggerEvent]: Exception");
-                        newClientEvent -= handler;
-                    }
-                }).Start();
-            }
-        }
-    }
-}*/
-
-    class Client
+}
+ class Client
 {
     public Client(string name, string password, string address)
     {
@@ -188,18 +162,3 @@ public class Server : MarshalByRefObject, IServer
     }
 }
 
-public class Chat : MarshalByRefObject, IChat
-{
-    public event NewClientHandler newClientEvent;
-    public Chat()
-    {
-        Console.WriteLine("chat room on");
-    }
-
-    public override object InitializeLifetimeService()
-    {
-        Console.WriteLine("[Entities]: InitilizeLifetimeService");
-        return null;
-    }
-}
-}
