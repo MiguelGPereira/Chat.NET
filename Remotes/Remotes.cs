@@ -13,7 +13,8 @@ public class Server : MarshalByRefObject, IServer
     private int nr = 1;
     List<Client> clients = new List<Client>();
 
-    public event HandlerNotify newClientEvent;
+    public event NewClientHandler newClientEvent;
+    public event ChatRequestHandler chatReqEvent;
 
     public override object InitializeLifetimeService()
     {
@@ -97,7 +98,7 @@ public class Server : MarshalByRefObject, IServer
         {
             Delegate[] invkList = newClientEvent.GetInvocationList();
 
-            foreach (HandlerNotify handler in invkList)
+            foreach (NewClientHandler handler in invkList)
             {
                 Console.WriteLine("[Server]: Join Event triggered: invoking handler to inform client");
                 new Thread(() =>
@@ -116,9 +117,60 @@ public class Server : MarshalByRefObject, IServer
         }
         return clientInst;
     }
-}
 
-class Client
+    public bool CreateNewChatRequest(ClientInstance clientInst, string destination)
+    {
+        if (chatReqEvent != null)
+        {
+            Delegate[] invkList = chatReqEvent.GetInvocationList();
+
+            foreach (ChatRequestHandler handler in invkList)
+            {
+                Console.WriteLine("[Server]: Chat Event triggered: invoking handler to inform client");
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(clientInst, destination);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("[TriggerEvent]: Exception");
+                        chatReqEvent -= handler;
+                    }
+                }).Start();
+            }
+        }
+        return true;
+    }
+
+    /*public void CreateNewChatRequest(string name, string address)
+    {
+        if (newClientRequest != null)
+        {
+            Delegate[] invkList = newClientRequest.GetInvocationList();
+
+            foreach (NewClientHandler handler in invkList)
+            {
+                Console.WriteLine("[Server]: invoking handler to inform client of request");
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(clientInst);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("[TriggerEvent]: Exception");
+                        newClientEvent -= handler;
+                    }
+                }).Start();
+            }
+        }
+    }
+}*/
+
+    class Client
 {
     public Client(string name, string password, string address)
     {
@@ -138,7 +190,7 @@ class Client
 
 public class Chat : MarshalByRefObject, IChat
 {
-    public event HandlerNotify newClientEvent;
+    public event NewClientHandler newClientEvent;
     public Chat()
     {
         Console.WriteLine("chat room on");
@@ -149,4 +201,5 @@ public class Chat : MarshalByRefObject, IChat
         Console.WriteLine("[Entities]: InitilizeLifetimeService");
         return null;
     }
+}
 }

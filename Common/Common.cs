@@ -1,6 +1,7 @@
 ﻿using System;
 
-public delegate void HandlerNotify(ClientInstance newClientEvent);
+public delegate void NewClientHandler(ClientInstance newClient);
+public delegate void ChatRequestHandler(ClientInstance clientInst, string destination);
 
 [Serializable]
 public class ClientInstance
@@ -18,22 +19,31 @@ public class ClientInstance
 
 public interface IServer
 {
-    event HandlerNotify newClientEvent;
+    event NewClientHandler newClientEvent;
+    event ChatRequestHandler chatReqEvent;
     ClientInstance AddNewClient(string name, string password, string address);
+    bool CreateNewChatRequest(ClientInstance clientInst, string destination);
 }
 
 public class Intermediate : MarshalByRefObject
 {
-    public event HandlerNotify newClientEvent;
+    public event NewClientHandler newClientEvent;
+    public event ChatRequestHandler chatReqEvent;
 
     public Intermediate(IServer server)
     {
         server.newClientEvent += FireNewClient;
+        server.chatReqEvent += FireChatRequest;
     }
 
     public void FireNewClient(ClientInstance client)
     {
         newClientEvent(client);
+    }
+
+    public void FireChatRequest(ClientInstance client, string destination)
+    {
+        chatReqEvent(client, destination);
     }
 
     public override object InitializeLifetimeService()
@@ -43,5 +53,5 @@ public class Intermediate : MarshalByRefObject
 }
 public interface IChat
 {
-    event HandlerNotify newClientEvent;
+    event NewClientHandler newClientEvent;
 }

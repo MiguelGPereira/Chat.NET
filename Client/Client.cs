@@ -6,12 +6,16 @@ using System.Text.RegularExpressions;
 
 class Client
 {
+
+    static string address = "";
+
     static void Main(string[] args)
     {
         RemotingConfiguration.Configure("Client.exe.config", false);
         IServer server = (IServer)RemoteNew.New(typeof(IServer));
         Intermediate inter = new Intermediate(server);
         inter.newClientEvent += OnNewClient;
+        inter.chatReqEvent += OnNewChatRequest;
 
         ClientInstance self = null;
         while(self == null)
@@ -30,6 +34,9 @@ class Client
             if(self != null)
             {
                 Console.WriteLine("[Client]: Joined! (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
+                Client.address = address;
+                string destination = Console.ReadLine();
+                server.CreateNewChatRequest(self, destination);
                 Console.ReadLine();
             }
             else
@@ -41,6 +48,8 @@ class Client
 
         inter.newClientEvent -= OnNewClient;
         server.newClientEvent -= inter.FireNewClient;
+        inter.chatReqEvent -= OnNewChatRequest;
+        server.chatReqEvent -= inter.FireChatRequest;
     }
 
     /*
@@ -49,6 +58,15 @@ class Client
     static void OnNewClient(ClientInstance client)
     {
         Console.WriteLine("[Client Joined]: " + client.Name + " in: " + client.Address);
+    }
+
+    static void OnNewChatRequest(ClientInstance client, string destination)
+    {
+        Console.WriteLine("[Client Chat Request]: "+ "broadcast received");
+        if(destination == Client.address)
+        {
+            Console.WriteLine("[Client Chat Request]: Client '"+client.Name+"' requested a chat!");
+        }
     }
 
     /*
