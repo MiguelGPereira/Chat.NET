@@ -10,9 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Remotes", "Remotes\Remotes.csproj", "{F92850A9-6762-4B5A-8D29-C8637A538710}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{F7789816-7A44-488D-82FA-224C8FC1CFB2}"
-	ProjectSection(ProjectDependencies) = postProject
-		{F92850A9-6762-4B5A-8D29-C8637A538710} = {F92850A9-6762-4B5A-8D29-C8637A538710}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

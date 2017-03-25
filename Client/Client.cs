@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Text.RegularExpressions;
@@ -7,38 +8,36 @@ using System.Text.RegularExpressions;
 class Client
 {
 
-    static string address = "";
+    static string port = "";
     static string name = "";
-    static ClientInstance instance = null;
+    static ClientInstance self = null;
+    static Intermediate inter = null;
 
     static void Main(string[] args)
     {
         RemotingConfiguration.Configure("Client.exe.config", false);
         IServer server = (IServer)RemoteNew.New(typeof(IServer));
-        Intermediate inter = new Intermediate(server);
+        inter = new Intermediate(server);
         inter.newClientEvent += OnNewClient;
         inter.chatReqEvent += OnNewChatRequest;
 
-        ClientInstance self = null;
         while(self == null)
         {
             Console.WriteLine("[Client] Enter username:");
-            string name = Console.ReadLine();
+            name = Console.ReadLine();
             Console.WriteLine("[Client] Enter password:");
             string password = Console.ReadLine();
             
-            string address = getClientTCPAddressPort();
-            Console.WriteLine("[Client]Port: "+ address);
+            port = getClientTCPAddressPort();
+            Console.WriteLine("[Client]Port: "+ port);
+
             /*
              * Pede ao servidor que lhe crie uma instancia
              */
-            self = server.AddNewClient(name, password, address);
+            self = server.AddNewClient(name, password, port);
             if(self != null)
             {
                 Console.WriteLine("[Client]: Joined! (Id=" + self.Id.ToString() + ", Name=" + self.Name + ")");
-                Client.address = address;
-                Client.name = name;
-                Client.instance = self;
 
                 Console.WriteLine("Want to make a connection? (y/n)");
                 string res = Console.ReadLine();
@@ -47,17 +46,18 @@ class Client
                     string destination = Console.ReadLine();
                     server.CreateNewChatRequest(self, destination);
 
-                    Chat chat = (Chat)RemotingServices.Connect(typeof(Chat),
-                    "tcp://localhost:" + Client.address + "/Client/Chat"
-                    );
-                    chat.NewMessage += handleNewChatMessage;
+                    inter.ConnectChat((Chat)RemotingServices.Connect(typeof(Chat),
+                        "tcp://localhost:" + Client.port + "/Client/Chat"
+                        ));
+                    inter.newMessage += handleNewChatMessage;
                     while (true)
                     {
                         Console.WriteLine("Write new message");
                         string message = Console.ReadLine();
                         string source = name;
-                        chat.addMessage(self, message);
+                        inter.chat.addMessage(self, message);
                     }
+                    inter.newMessage -= handleNewChatMessage;
                 }
                 else
                 {
@@ -84,9 +84,13 @@ class Client
     /*
      * Recebe o registo de novos clientes
      */
-    static void OnNewClient(ClientInstance client)
+    static void OnNewClient(ClientInstance client, List<ClientObj> clients)
     {
-        Console.WriteLine("[Client Joined]: " + client.Name + " in: " + client.Address);
+        Console.WriteLine("[Client Joined]: Update clients list:");
+        foreach(ClientObj c in clients)
+        {
+            Console.WriteLine("Client '" + c.Name + "' in port '" + c.Port + "'");
+        }
     }
 
 
@@ -96,27 +100,27 @@ class Client
     static void OnNewChatRequest(ClientInstance client, string destination)
     {
         Console.WriteLine("[Client Chat Request]: "+ "broadcast received");
-        if(destination == Client.address)
+        if(destination == Client.port)
         {
             Console.WriteLine("[Client Chat Request]: Client '"+client.Name+"' requested a chat!");
-            Chat chat = (Chat)RemotingServices.Connect(typeof(Chat),
-            "tcp://localhost:"+client.Address+"/Client/Chat"
-            );
-            chat.NewMessage += handleNewChatMessage;
+
+            inter.ConnectChat((Chat)RemotingServices.Connect(typeof(Chat),
+                "tcp://localhost:" + client.Address + "/Client/Chat"
+                ));
+            inter.newMessage += handleNewChatMessage;
             while (true)
             {
                 Console.WriteLine("Write new message");
                 string message = Console.ReadLine();
-                string source = Client.name;
-                chat.addMessage(Client.instance, message);
+                string source = name;
+                inter.chat.addMessage(Client.self, message);
             }
-            
+            inter.newMessage -= handleNewChatMessage;
         }
     }
 
     /*
-     * Imprime mensagens recebidas no chat por quem recebe o chat request
-     * (quem inicia interage atraves da classe Chat)
+     * Imprime mensagens recebidas no chat
      */
      static void handleNewChatMessage(ClientInstance source, string message)
     {
@@ -183,24 +187,4 @@ class RemoteNew
     }
 }
 
-/*
- * Representa o objecto remoto e parte daqui a interação do cliente que faz o chat request
- */
-public class Chat : MarshalByRefObject
-{
-    public delegate void NewMessageHandler(ClientInstance source, string message);
-    public event NewMessageHandler NewMessage;
 
-    public Chat() {}
-
-    public override object InitializeLifetimeService()
-    {
-        Console.WriteLine("[Entities]: InitilizeLifetimeService");
-        return null;
-    }
-
-    public void addMessage(ClientInstance source, string message)
-    {
-        NewMessage(source, message);
-    }
-}

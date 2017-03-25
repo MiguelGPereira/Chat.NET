@@ -11,7 +11,8 @@ public class Server : MarshalByRefObject, IServer
     }
 
     private int nr = 1;
-    List<Client> clients = new List<Client>();
+    List<ClientObj> clients = new List<ClientObj>();
+    List<ClientObj> clientsOnline = new List<ClientObj>();
 
     public event NewClientHandler newClientEvent;
     public event ChatRequestHandler chatReqEvent;
@@ -22,9 +23,9 @@ public class Server : MarshalByRefObject, IServer
         return null;
     }
 
-    private Client getClientByName(string name)
+    private ClientObj getClientByName(string name)
     {
-        foreach (Client client in clients)
+        foreach (ClientObj client in clients)
         {
             if (client.Name == name)
             {
@@ -35,7 +36,7 @@ public class Server : MarshalByRefObject, IServer
         return null;
     }
 
-    private void saveClient(Client client)
+    private void saveClient(ClientObj client)
     {
         clients.Add(client);
 
@@ -57,9 +58,9 @@ public class Server : MarshalByRefObject, IServer
             {
                 string name = line.Split('%')[0];
                 string password = line.Split('%')[1];
-                string address = line.Split('%')[2];
+                string port = line.Split('%')[2];
 
-                Client client = new Client(name, password, address);
+                ClientObj client = new ClientObj(name, password, port);
                 clients.Add(client);
 
                 line = sr.ReadLine();
@@ -74,14 +75,14 @@ public class Server : MarshalByRefObject, IServer
      * Recebe um pedido de criacao de instancia de um novo cliente e informa
      * todos os clientes sobre isso
      */
-    public ClientInstance AddNewClient(string name, string password, string address)
+    public ClientInstance AddNewClient(string name, string password, string port)
     {
-        Client client = getClientByName(name);
+        ClientObj client = getClientByName(name);
         string userevent = "login";
 
         if (client == null)
         {
-            client = new Client(name, password, address);
+            client = new ClientObj(name, password, port);
             saveClient(client);
             userevent = "signup";
         }
@@ -90,8 +91,9 @@ public class Server : MarshalByRefObject, IServer
             return null;
         }
 
-        ClientInstance clientInst = new ClientInstance(nr, name, address);
+        ClientInstance clientInst = new ClientInstance(nr, name, port);
         Console.WriteLine("[Server]: New client " + userevent + " (" + name + ")");
+        clientsOnline.Add(client);
         nr += 1;
 
         if (newClientEvent != null)
@@ -105,11 +107,12 @@ public class Server : MarshalByRefObject, IServer
                 {
                     try
                     {
-                        handler(clientInst);
+                        handler(clientInst, clientsOnline);
                     }
-                    catch (Exception)
+                    catch (Exception e)
                     {
                         Console.WriteLine("[TriggerEvent]: Exception");
+                        Console.WriteLine(e.Message);
                         newClientEvent -= handler;
                     }
                 }).Start();
@@ -144,21 +147,6 @@ public class Server : MarshalByRefObject, IServer
         return true;
     }
 }
- class Client
-{
-    public Client(string name, string password, string address)
-    {
-        Name = name;
-        Password = password;
-        Address = address;
-    }
-    public string Name { get; set; }
-    public string Password { get; set; }
-    public string Address { get; set; }
 
-    public string Info()
-    {
-        return Name + "%" + Password + "%" + Address;
-    }
-}
+
 
