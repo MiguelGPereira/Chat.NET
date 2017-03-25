@@ -23,12 +23,13 @@ public class Server : MarshalByRefObject, IServer
         return null;
     }
 
-    private ClientObj getClientByName(string name)
+    private ClientObj getClientByName(string name, string port)
     {
         foreach (ClientObj client in clients)
         {
             if (client.Name == name)
             {
+                client.Port = port;
                 return client;
             }
         }
@@ -77,7 +78,7 @@ public class Server : MarshalByRefObject, IServer
      */
     public ClientInstance AddNewClient(string name, string password, string port)
     {
-        ClientObj client = getClientByName(name);
+        ClientObj client = getClientByName(name, port);
         string userevent = "login";
 
         if (client == null)
