@@ -264,5 +264,19 @@ public class Server : MarshalByRefObject, IServer
             }
         }
     }
+
+    public void ClientLogout(ClientInstance clientInst)
+    {
+        foreach(ClientObj clientObj in clientsOnline)
+        {
+            if (clientObj.Name.Equals(clientInst.Name))
+            {
+                clientsOnline.Remove(clientObj);
+                break;
+            }
+        }
+
+        NotifyClients(Operation.ClientOff, clientInst);
+    }
 }
 

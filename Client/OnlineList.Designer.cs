@@ -64,6 +64,7 @@ partial class OnlineList
             this.Controls.Add(this.listBox1);
             this.Name = "OnlineList";
             this.Text = "OnlineList";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnlineList_FormClosing);
             this.Load += new System.EventHandler(this.OnlineList_Load);
             this.ResumeLayout(false);
 

@@ -23,6 +23,8 @@ public partial class OnlineList : Form
     ChatEventRepeater chEvRepeater;
     delegate void ChatViewStartDelegate(ClientInstance clientInst);
 
+    ChatView viewChat;
+
     public OnlineList(IServer serv, ClientInstance cI)
     {
         server = serv;
@@ -102,8 +104,11 @@ public partial class OnlineList : Form
                 break;
 
             case Operation.ClientOff:
-                lbRemove = new LBRemoveDelegate(RemoveClient);
-                BeginInvoke(lbRemove, clientInst);
+                if (clientInst != null)
+                {
+                    lbRemove = new LBRemoveDelegate(RemoveClient);
+                    BeginInvoke(lbRemove, clientInst);
+                }
                 break;
         }
     }
@@ -148,8 +153,18 @@ public partial class OnlineList : Form
          */
         //this.Hide();
         var chatView = new ChatView(server, self, clientInst.Name);
+        viewChat = chatView;
         //onlineList.Closed += (s, args) => this.Close();
         chatView.Show();
+    }
+
+    private void OnlineList_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        if (viewChat != null)
+        {
+            viewChat.Close();
+        }
+        server.ClientLogout(self);
     }
 }
 

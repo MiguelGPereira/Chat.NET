@@ -35,6 +35,7 @@ public interface IServer
     bool CreateNewChatRequest(ClientInstance clientInst, ClientObj clientDestination);
     List<ClientObj> GetClientsOnline();
     void MessageNotification(Operation op, string message, string destinationName);
+    void ClientLogout(ClientInstance clientInst);
 
     event AlterDelegate alterEvent;
     event ChatDelegate chatEvent;
