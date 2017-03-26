@@ -18,3 +18,13 @@ C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Server\bin\Debug\Remotes.pdb
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Server\obj\Debug\Server.exe
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Server\obj\Debug\Server.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Server.exe.config
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\obj\Debug\Server.exe
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\obj\Debug\Server.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Server.exe
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Server.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Common.dll
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Remotes.dll
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Common.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\bin\Debug\Remotes.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache

@@ -17,6 +17,10 @@ public class Server : MarshalByRefObject, IServer
     public event NewClientHandler newClientEvent;
     public event ChatRequestHandler chatReqEvent;
 
+    public event AlterDelegate alterEvent;
+    public event ChatDelegate chatEvent;
+    public event MessageDelegate messageEvent;
+
     public override object InitializeLifetimeService()
     {
         Console.WriteLine("[Entities]: InitilizeLifetimeService");
@@ -96,6 +100,7 @@ public class Server : MarshalByRefObject, IServer
         Console.WriteLine("[Server]: New client " + userevent + " (" + name + ")");
         clientsOnline.Add(client);
         nr += 1;
+        NotifyClients(Operation.ClientOn, clientInst);
 
         if (newClientEvent != null)
         {
@@ -124,6 +129,7 @@ public class Server : MarshalByRefObject, IServer
 
     public bool CreateNewChatRequest(ClientInstance clientInst, string destination)
     {
+        //NotifyChatEvent(Operation.NewChat, clientInst);
         if (chatReqEvent != null)
         {
             Delegate[] invkList = chatReqEvent.GetInvocationList();
@@ -147,7 +153,116 @@ public class Server : MarshalByRefObject, IServer
         }
         return true;
     }
+
+    public bool CreateNewChatRequest(ClientInstance clientInst, ClientObj clientDestination)
+    {
+        NotifyChatEvent(Operation.NewChat, clientInst, clientDestination);
+        if (chatReqEvent != null)
+        {
+            Delegate[] invkList = chatReqEvent.GetInvocationList();
+
+            foreach (ChatRequestHandler handler in invkList)
+            {
+                Console.WriteLine("[Server]: Chat Event triggered: invoking handler to inform client");
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(clientInst, clientDestination.Port);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("[TriggerEvent]: Exception");
+                        chatReqEvent -= handler;
+                    }
+                }).Start();
+            }
+        }
+        return true;
+    }
+
+    public List<ClientObj> GetClientsOnline()
+    {
+        return clientsOnline;
+    }
+
+    /*
+    * Notificar clientes de um evento
+    */
+
+    void NotifyClients(Operation op, ClientInstance clientInst)
+    {
+        if (alterEvent != null)
+        {
+            Delegate[] invkList = alterEvent.GetInvocationList();
+
+            foreach (AlterDelegate handler in invkList)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(op, clientInst);
+                        Console.WriteLine("Invoking event handler (NotifyClients)");
+                    }
+                    catch (Exception)
+                    {
+                        alterEvent -= handler;
+                        Console.WriteLine("Exception: Removed an event handler (NotifyClients)");
+                    }
+                }).Start();
+            }
+        }
+    }
+
+    void NotifyChatEvent(Operation op, ClientInstance clientInst, ClientObj clientDestination)
+    {
+        if (chatEvent != null)
+        {
+            Delegate[] invkList = chatEvent.GetInvocationList();
+
+            foreach (ChatDelegate handler in invkList)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(op, clientInst, clientDestination);
+                        Console.WriteLine("Invoking event handler (NotifyChatEvent)");
+                    }
+                    catch (Exception)
+                    {
+                        chatEvent -= handler;
+                        Console.WriteLine("Exception: Removed an event handler (NotifyChatEvent)");
+                    }
+                }).Start();
+            }
+        }
+    }
+
+    public void MessageNotification(Operation op, string message, string destinationName)
+    {
+        if (messageEvent != null)
+        {
+            Delegate[] invkList = messageEvent.GetInvocationList();
+
+            foreach (MessageDelegate handler in invkList)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(op, message, destinationName);
+                        Console.WriteLine("Invoking event handler (NotifyChatEvent)");
+                    }
+                    catch (Exception)
+                    {
+                        messageEvent -= handler;
+                        Console.WriteLine("Exception: Removed an event handler (NotifyChatEvent)");
+                    }
+                }).Start();
+            }
+        }
+    }
 }
-
-
 

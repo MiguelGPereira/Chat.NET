@@ -14,3 +14,15 @@ C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\bin\Debug\Common.pdb
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.exe
 C:\Users\Miguel\Downloads\RemoteMultiDemo\Chat\Client\obj\Debug\Client.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\bin\Debug\Client.exe.config
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\Client.exe
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\Client.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\bin\Debug\Client.exe
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\bin\Debug\Client.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\bin\Debug\Common.dll
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\bin\Debug\Common.pdb
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\Login.resources
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\OnlineList.resources
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\Pc\Desktop\TDIN\Trabalho1\Rep\Chat.NET\Client\obj\Debug\ChatView.resources

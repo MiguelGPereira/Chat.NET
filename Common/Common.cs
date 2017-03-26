@@ -20,12 +20,74 @@ public class ClientInstance
     public string Address { get; set; }
 }
 
+public enum Operation { ClientOn, ClientOff, NewChat, NewMessage };
+
+public delegate void AlterDelegate(Operation op, ClientInstance clientInst);
+public delegate void ChatDelegate(Operation op, ClientInstance clientOrigin, ClientObj clientDestination);
+public delegate void MessageDelegate(Operation op, string message, string destinationName);
+
 public interface IServer
 {
     event NewClientHandler newClientEvent;
     event ChatRequestHandler chatReqEvent;
     ClientInstance AddNewClient(string name, string password, string port);
     bool CreateNewChatRequest(ClientInstance clientInst, string destination);
+    bool CreateNewChatRequest(ClientInstance clientInst, ClientObj clientDestination);
+    List<ClientObj> GetClientsOnline();
+    void MessageNotification(Operation op, string message, string destinationName);
+
+    event AlterDelegate alterEvent;
+    event ChatDelegate chatEvent;
+    event MessageDelegate messageEvent;
+}
+
+
+public class AlterEventRepeater : MarshalByRefObject
+{
+    public event AlterDelegate alterEvent;
+
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
+    public void Repeater(Operation op, ClientInstance clientInst)
+    {
+        if (alterEvent != null)
+            alterEvent(op, clientInst);
+    }
+}
+
+public class ChatEventRepeater : MarshalByRefObject
+{
+    public event ChatDelegate chatEvent;
+
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
+    public void Repeater(Operation op, ClientInstance clientInst, ClientObj clientDestination)
+    {
+        if (chatEvent != null)
+            chatEvent(op, clientInst, clientDestination);
+    }
+}
+
+public class MessageEventRepeater : MarshalByRefObject
+{
+    public MessageDelegate messageEvent;
+
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
+    public void Repeater(Operation op, string message, string destinationName)
+    {
+        if (messageEvent != null)
+            messageEvent(op, message, destinationName);
+    }
 }
 
 
@@ -94,6 +156,7 @@ public class Chat : MarshalByRefObject
     public void addMessage(ClientInstance source, string message)
     {
         NewMessage(source, message);
+        
     }
 }
 
