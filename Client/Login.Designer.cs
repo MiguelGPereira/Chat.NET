@@ -32,6 +32,8 @@ partial class Login
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -57,6 +59,7 @@ partial class Login
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(100, 20);
             this.textBox2.TabIndex = 2;
+            this.textBox2.UseSystemPasswordChar = true;
             // 
             // label1
             // 
@@ -76,11 +79,35 @@ partial class Login
             this.label2.TabIndex = 4;
             this.label2.Text = "Password";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.ForeColor = System.Drawing.Color.Red;
+            this.label3.Location = new System.Drawing.Point(45, 139);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(192, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Username and password do not match!";
+            this.label3.Visible = false;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Location = new System.Drawing.Point(12, 204);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(260, 45);
+            this.richTextBox1.TabIndex = 6;
+            this.richTextBox1.Text = "To register simply pick a username and a password and press login (Username might" +
+    " already exist)";
+            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox2);
@@ -100,4 +127,6 @@ partial class Login
     private System.Windows.Forms.TextBox textBox2;
     private System.Windows.Forms.Label label1;
     private System.Windows.Forms.Label label2;
+    private System.Windows.Forms.Label label3;
+    private System.Windows.Forms.RichTextBox richTextBox1;
 }

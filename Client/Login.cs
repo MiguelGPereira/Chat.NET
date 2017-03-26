@@ -46,6 +46,9 @@ public partial class Login : Form
                 var onlineList = new OnlineList(server, self);
                 onlineList.Closed += (s, args) => this.Close();
                 onlineList.Show();
+            }else
+            {
+                label3.Visible = true;
             }
         }
     }
