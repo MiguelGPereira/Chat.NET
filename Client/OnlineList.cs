@@ -87,6 +87,7 @@ public partial class OnlineList : Form
                 listBox1.Items.Add(client.Name);
             }
         }
+        this.Text = self.Name + "'s Online List";
     }
 
     /*

@@ -43,7 +43,7 @@ public partial class ChatView : Form
 
     private void ChatView_Load(object sender, EventArgs e)
     {
-        this.Text = "Talking with " + otherUser;
+        this.Text = self.Name + " Talking with " + otherUser;
     }
 
     private void button1_Click(object sender, EventArgs e)
