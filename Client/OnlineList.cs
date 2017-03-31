@@ -71,6 +71,7 @@ public partial class OnlineList : Form
                 //this.Hide();
                 var chatView = new ChatView(server, self, destinationClient.Name);
                 //onlineList.Closed += (s, args) => this.Close();
+                viewChat = chatView;
                 chatView.Show();
             }
         }
@@ -162,6 +163,7 @@ public partial class OnlineList : Form
     {
         if (viewChat != null)
         {
+            viewChat.OustideOrderToClose();
             viewChat.Close();
         }
         server.ClientLogout(self);

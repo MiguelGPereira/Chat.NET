@@ -20,11 +20,12 @@ public class ClientInstance
     public string Address { get; set; }
 }
 
-public enum Operation { ClientOn, ClientOff, NewChat, NewMessage };
+public enum Operation { ClientOn, ClientOff, NewChat, NewMessage, ChatClosed};
 
 public delegate void AlterDelegate(Operation op, ClientInstance clientInst);
 public delegate void ChatDelegate(Operation op, ClientInstance clientOrigin, ClientObj clientDestination);
 public delegate void MessageDelegate(Operation op, string message, string destinationName);
+public delegate void ChatClosedDelegate(Operation op, string destinationName);
 
 public interface IServer
 {
@@ -35,11 +36,13 @@ public interface IServer
     bool CreateNewChatRequest(ClientInstance clientInst, ClientObj clientDestination);
     List<ClientObj> GetClientsOnline();
     void MessageNotification(Operation op, string message, string destinationName);
+    void ChatClosedNotification(Operation op, string destinationName);
     void ClientLogout(ClientInstance clientInst);
 
     event AlterDelegate alterEvent;
     event ChatDelegate chatEvent;
     event MessageDelegate messageEvent;
+    event ChatClosedDelegate chatClosedEvent;
 }
 
 
@@ -88,6 +91,22 @@ public class MessageEventRepeater : MarshalByRefObject
     {
         if (messageEvent != null)
             messageEvent(op, message, destinationName);
+    }
+}
+
+public class ChatClosedEventRepeater : MarshalByRefObject
+{
+    public ChatClosedDelegate chatClosedEvent;
+
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
+
+    public void Repeater(Operation op, string destinationName)
+    {
+        if (chatClosedEvent != null)
+            chatClosedEvent(op, destinationName);
     }
 }
 
@@ -156,7 +175,13 @@ public class Chat : MarshalByRefObject
 
     public void addMessage(ClientInstance source, string message)
     {
-        NewMessage(source, message);
+        try
+        {
+            NewMessage(source, message);
+        }catch(Exception e)
+        {
+            Console.WriteLine("Error with chat");
+        }
         
     }
 }

@@ -19,6 +19,12 @@ public partial class ChatView : Form
     MessageEventRepeater msgEvRepeater;
     delegate void ReceiveMessageDelegate(string message);
 
+    ChatClosedEventRepeater chatClosEvRepeater;
+    delegate void ClosedChatDelegate();
+
+    //is this chat still active?
+    bool active = false;
+
     public ChatView(IServer serv, ClientInstance cI, string _otherUser)
     {
         server = serv;
@@ -29,6 +35,10 @@ public partial class ChatView : Form
         msgEvRepeater = new MessageEventRepeater();
         msgEvRepeater.messageEvent += new MessageDelegate(MessageReceived);
         server.messageEvent += new MessageDelegate(msgEvRepeater.Repeater);
+        chatClosEvRepeater = new ChatClosedEventRepeater();
+        chatClosEvRepeater.chatClosedEvent += new ChatClosedDelegate(UserLoggedOut);
+        server.chatClosedEvent += new ChatClosedDelegate(chatClosEvRepeater.Repeater);
+        active = true;
     }
 
     private void ChatView_Load(object sender, EventArgs e)
@@ -52,7 +62,7 @@ public partial class ChatView : Form
         switch (op)
         {
             case Operation.NewMessage:
-                if (self.Name.Equals(destinationName))
+                if (self.Name.Equals(destinationName) && active)
                 {
                     msgRec = new ReceiveMessageDelegate(NewMessage);
                     BeginInvoke(msgRec, message);
@@ -65,5 +75,50 @@ public partial class ChatView : Form
     {
         string textToAdd = otherUser + " said: " + message;
         richTextBox1.Text += "\n" + textToAdd;
+    }
+
+    private void UserLoggedOut(Operation op, string destinationName)
+    {
+        ClosedChatDelegate closedChat;
+
+        switch (op)
+        {
+            case Operation.ChatClosed:
+                if (self.Name.Equals(destinationName) && active)
+                {
+                    closedChat = new ClosedChatDelegate(OtherUserLoggedOutActions);
+                    BeginInvoke(closedChat);
+                }
+                break;
+        }
+    }
+
+    void OtherUserLoggedOutActions()
+    {
+        richTextBox1.Text += "\n" + otherUser + " has ended this conversation";
+        button1.Enabled = false;
+        active = false;
+    }
+
+    private void ChatView_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        server.ChatClosedNotification(Operation.ChatClosed, otherUser);
+        Client.inter.newMessage -= Client.handleNewChatMessage;
+        msgEvRepeater.messageEvent -= new MessageDelegate(MessageReceived);
+        server.messageEvent -= new MessageDelegate(msgEvRepeater.Repeater);
+        chatClosEvRepeater.chatClosedEvent -= new ChatClosedDelegate(UserLoggedOut);
+        server.chatClosedEvent -= new ChatClosedDelegate(chatClosEvRepeater.Repeater);
+    }
+
+    public void OustideOrderToClose()
+    {
+        button1.Enabled = false;
+        active = false;
+        server.ChatClosedNotification(Operation.ChatClosed, otherUser);
+        Client.inter.newMessage -= Client.handleNewChatMessage;
+        msgEvRepeater.messageEvent -= new MessageDelegate(MessageReceived);
+        server.messageEvent -= new MessageDelegate(msgEvRepeater.Repeater);
+        chatClosEvRepeater.chatClosedEvent -= new ChatClosedDelegate(UserLoggedOut);
+        server.chatClosedEvent -= new ChatClosedDelegate(chatClosEvRepeater.Repeater);
     }
 }

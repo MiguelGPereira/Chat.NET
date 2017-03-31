@@ -68,6 +68,7 @@
             this.Controls.Add(this.richTextBox1);
             this.Name = "ChatView";
             this.Text = "ChatView";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ChatView_FormClosing);
             this.Load += new System.EventHandler(this.ChatView_Load);
             this.ResumeLayout(false);
 

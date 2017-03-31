@@ -20,6 +20,7 @@ public class Server : MarshalByRefObject, IServer
     public event AlterDelegate alterEvent;
     public event ChatDelegate chatEvent;
     public event MessageDelegate messageEvent;
+    public event ChatClosedDelegate chatClosedEvent;
 
     public override object InitializeLifetimeService()
     {
@@ -258,6 +259,31 @@ public class Server : MarshalByRefObject, IServer
                     catch (Exception)
                     {
                         messageEvent -= handler;
+                        Console.WriteLine("Exception: Removed an event handler (NotifyChatEvent)");
+                    }
+                }).Start();
+            }
+        }
+    }
+
+    public void ChatClosedNotification(Operation op, string destinationName)
+    {
+        if (chatClosedEvent != null)
+        {
+            Delegate[] invkList = chatClosedEvent.GetInvocationList();
+
+            foreach (ChatClosedDelegate handler in invkList)
+            {
+                new Thread(() =>
+                {
+                    try
+                    {
+                        handler(op, destinationName);
+                        Console.WriteLine("Invoking event handler (NotifyChatEvent)");
+                    }
+                    catch (Exception)
+                    {
+                        chatClosedEvent -= handler;
                         Console.WriteLine("Exception: Removed an event handler (NotifyChatEvent)");
                     }
                 }).Start();
