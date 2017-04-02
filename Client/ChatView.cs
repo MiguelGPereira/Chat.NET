@@ -43,7 +43,7 @@ public partial class ChatView : Form
 
     private void ChatView_Load(object sender, EventArgs e)
     {
-        this.Text = self.Name + " Talking with " + otherUser;
+        Text = self.Name + " Talking with " + otherUser;
     }
 
     private void button1_Click(object sender, EventArgs e)
@@ -52,17 +52,17 @@ public partial class ChatView : Form
         richTextBox2.Clear();
         richTextBox1.Text += "\n" + self.Name + " said: " + textToSend;
         Client.inter.chat.addMessage(self, textToSend);
-        server.MessageNotification(Operation.NewMessage, textToSend, otherUser);
+        server.MessageNotification(Operation.NewMessage, textToSend, otherUser, self.Name);
     }
 
-    void MessageReceived(Operation op, string message, string destinationName)
+    void MessageReceived(Operation op, string message, string destinationName, string senderName)
     {
         ReceiveMessageDelegate msgRec;
 
         switch (op)
         {
             case Operation.NewMessage:
-                if (self.Name.Equals(destinationName) && active)
+                if (self.Name.Equals(destinationName) && active && senderName.Equals(otherUser))
                 {
                     msgRec = new ReceiveMessageDelegate(NewMessage);
                     BeginInvoke(msgRec, message);

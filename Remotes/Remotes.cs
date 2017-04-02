@@ -241,7 +241,7 @@ public class Server : MarshalByRefObject, IServer
         }
     }
 
-    public void MessageNotification(Operation op, string message, string destinationName)
+    public void MessageNotification(Operation op, string message, string destinationName, string senderName)
     {
         if (messageEvent != null)
         {
@@ -253,7 +253,7 @@ public class Server : MarshalByRefObject, IServer
                 {
                     try
                     {
-                        handler(op, message, destinationName);
+                        handler(op, message, destinationName, senderName);
                         Console.WriteLine("Invoking event handler (NotifyChatEvent)");
                     }
                     catch (Exception)

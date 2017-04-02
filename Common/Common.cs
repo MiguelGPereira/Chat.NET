@@ -24,7 +24,7 @@ public enum Operation { ClientOn, ClientOff, NewChat, NewMessage, ChatClosed};
 
 public delegate void AlterDelegate(Operation op, ClientInstance clientInst);
 public delegate void ChatDelegate(Operation op, ClientInstance clientOrigin, ClientObj clientDestination);
-public delegate void MessageDelegate(Operation op, string message, string destinationName);
+public delegate void MessageDelegate(Operation op, string message, string destinationName, string senderName);
 public delegate void ChatClosedDelegate(Operation op, string destinationName);
 
 public interface IServer
@@ -35,7 +35,7 @@ public interface IServer
     bool CreateNewChatRequest(ClientInstance clientInst, string destination);
     bool CreateNewChatRequest(ClientInstance clientInst, ClientObj clientDestination);
     List<ClientObj> GetClientsOnline();
-    void MessageNotification(Operation op, string message, string destinationName);
+    void MessageNotification(Operation op, string message, string destinationName, string senderName);
     void ChatClosedNotification(Operation op, string destinationName);
     void ClientLogout(ClientInstance clientInst);
 
@@ -87,10 +87,10 @@ public class MessageEventRepeater : MarshalByRefObject
         return null;
     }
 
-    public void Repeater(Operation op, string message, string destinationName)
+    public void Repeater(Operation op, string message, string destinationName, string senderName)
     {
         if (messageEvent != null)
-            messageEvent(op, message, destinationName);
+            messageEvent(op, message, destinationName, senderName);
     }
 }
 
